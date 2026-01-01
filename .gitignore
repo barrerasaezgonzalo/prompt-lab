@@ -1,0 +1,18 @@
+# Entorno Virtual (Muy importante)
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Variables de Entorno 
+.env
+.flaskenv
+
+# Archivos de Sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
