@@ -22,7 +22,7 @@ def generate_ai_prompt(user_input: str):
     - Mantén la intención original pero eleva la complejidad técnica.
     - Devuelve solo el contenido estructurado, sin introducciones.
 
-    Prompt original: "{input}"
+    Prompt original: "{texto_input}"
     """
 
     try:

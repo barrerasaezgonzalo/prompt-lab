@@ -237,6 +237,7 @@ inputBusqueda.addEventListener("input", (e) => {
 btnLimpiarBusqueda.addEventListener("click", () => {
   inputBusqueda.value = "";
   busquedaActual = "";
+  idEnEdicion = null;
   cargarHistorial(1);
 });
 
@@ -257,6 +258,7 @@ listaHistorial.addEventListener("click", async (e) => {
       esConfirmacion: true,
       alConfirmar: async () => {
         await fetch(`/delete-prompt/${id}`, { method: "DELETE" });
+        idEnEdicion = null;
         cargarHistorial(paginaActual);
       },
     });
