@@ -17,6 +17,17 @@ const templateHistorial = document.getElementById("template-historial");
 
 // --- 3. FUNCIONES DE CARGA Y RENDERIZADO (HISTORIAL) ---
 
+function resetearFormulario() {
+  idEnEdicion = null;
+  document.getElementById("user_input").value = "";  
+  const btnEnviar = document.getElementById("btn-enviar");
+  btnEnviar.innerText = "Generar Prompt Mejorado";
+  btnEnviar.disabled = false;
+  if (resultadoDiv) {
+    resultadoDiv.style.display = "none";
+  }
+}
+
 async function cargarHistorial(pagina = 1) {
   if (!usuarioLogueado) {
     return;
@@ -122,10 +133,7 @@ async function manejarSubmitPrompt(e) {
     });
 
     if (response.ok) {
-      idEnEdicion = null;
-      document.getElementById("btn-enviar").innerText =
-        "Generar Prompt Mejorado";
-      document.getElementById("user_input").value = "";
+      resetearFormulario();
       abrirModal({
         titulo: "¡Prompt Actualizado!",
         mensaje: "Prompt Actualizado Correctamente.",
@@ -237,7 +245,7 @@ inputBusqueda.addEventListener("input", (e) => {
 btnLimpiarBusqueda.addEventListener("click", () => {
   inputBusqueda.value = "";
   busquedaActual = "";
-  idEnEdicion = null;
+  resetearFormulario();
   cargarHistorial(1);
 });
 
@@ -252,20 +260,26 @@ listaHistorial.addEventListener("click", async (e) => {
   const btnEliminar = e.target.closest(".btn-eliminar-prompt");
   if (btnEliminar) {
     const id = btnEliminar.getAttribute("data-id");
+    cargarHistorial(paginaActual);
     abrirModal({
       titulo: "¿Eliminar?",
       mensaje: "Esto borrará el registro permanentemente.",
       esConfirmacion: true,
       alConfirmar: async () => {
-        await fetch(`/delete-prompt/${id}`, { method: "DELETE" });
-        idEnEdicion = null;
-        cargarHistorial(paginaActual);
+        const response = await fetch(`/delete-prompt/${id}`, { method: "DELETE" });
+        if (response.ok) {
+          if (idEnEdicion === id) {
+            resetearFormulario();
+          }
+          cargarHistorial(paginaActual);
+        }
       },
     });
   }
 
   const btnCargar = e.target.closest(".btn-cargar-prompt");
   if (btnCargar) {
+    resetearFormulario();
     document.getElementById("user_input").value = btnCargar.getAttribute(
       "data-prompt-completo",
     );

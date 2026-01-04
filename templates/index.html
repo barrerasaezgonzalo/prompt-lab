@@ -1,339 +1,193 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prompt Lab</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  </head>
 
-  <body>
-    <div class="flex h-screen bg-zinc-950">
-      <aside class="w-80 bg-zinc-900 border-r border-zinc-800 flex flex-col">
-        <div class="p-6 border-b border-zinc-800">
-          <h1 class="text-2xl font-bold text-zinc-100 mb-4">Prompt Lab</h1>
-          <button
-            id="btn-login"
-            class="w-full py-2 px-4 rounded-lg font-medium transition-colors bg-amber-600 hover:bg-amber-700 text-white"
-          >
-            Conectar
-          </button>
-          <button
-            id="btn-logout"
-            class="w-full py-2 px-4 rounded-lg font-medium transition-colors bg-amber-600 hover:bg-amber-700 text-white"
-          >
-            Cerrar Sesión
-          </button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
 
-        <div class="flex-1 flex flex-col overflow-hidden">
-          <div class="p-6 pb-4" id="historial">
-            <h2 class="text-lg font-semibold text-zinc-100 mb-4">Historial</h2>
+<body>
+  <div class="flex h-screen bg-zinc-950">
+    <aside class="w-80 bg-zinc-900 border-r border-zinc-800 flex flex-col">
+      <div class="p-6 border-b border-zinc-800">
+        <h1 class="text-2xl font-bold text-zinc-100 mb-4">Prompt Lab</h1>
+        <button id="btn-login"
+          class="w-full py-2 px-4 rounded-lg font-medium transition-colors bg-amber-600 hover:bg-amber-700 text-white">
+          Conectar
+        </button>
+        <button id="btn-logout"
+          class="w-full py-2 px-4 rounded-lg font-medium transition-colors bg-amber-600 hover:bg-amber-700 text-white">
+          Cerrar Sesión
+        </button>
+      </div>
 
-            <div class="flex gap-2 mb-4">
-              <div class="flex-1 relative">
-                <input
-                  type="text"
-                  id="input-busqueda"
-                  placeholder="Buscar prompts..."
-                  class="w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-zinc-100 placeholder-zinc-500"
-                />
-              </div>
-              <button
-                id="btn-limpiar-busqueda"
-                class="p-2 bg-zinc-800 border border-zinc-700 rounded-lg hover:bg-zinc-700 text-zinc-400"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="p-6 pb-4" id="historial">
+          <h2 class="text-lg font-semibold text-zinc-100 mb-4">Historial</h2>
+
+          <div class="flex gap-2 mb-4">
+            <div class="flex-1 relative">
+              <input type="text" id="input-busqueda" placeholder="Buscar prompts..."
+                class="w-full pl-10 pr-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-zinc-100 placeholder-zinc-500" />
             </div>
-          </div>
-
-          <div
-            id="lista-historial"
-            class="space-y-2 overflow-y-auto max-h-[80vh]"
-          ></div>
-          <div
-            id="aviso-invitado"
-            class="hidden p-6 text-center border border-dashed border-zinc-700 rounded-lg"
-          >
-            <p class="text-zinc-400 text-sm">
-              Inicia sesión para guardar y ver tus prompts anteriores.
-            </p>
-          </div>
-
-          <template id="template-historial">
-            <div
-              class="item-historial p-4 bg-zinc-800 border border-zinc-700 rounded-lg hover:border-amber-600 transition-colors"
-            >
-              <h3
-                class="font-medium text-zinc-100 mb-1 truncate block w-full prompt-texto-li"
-              ></h3>
-              <p class="text-sm text-zinc-500 mb-3 prompt-fecha-li"></p>
-              <div class="flex gap-2">
-                <button
-                  data-prompt-completo=""
-                  class="btn-cargar-prompt flex-1 px-3 py-1.5 text-sm bg-amber-600 text-white rounded hover:bg-amber-700"
-                >
-                  Cargar
-                </button>
-                <button
-                  data-prompt-completo=""
-                  class="btn-fav p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-zinc-600 text-zinc-300"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  data-prompt-completo=""
-                  class="btn-editar p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-zinc-600 text-zinc-300"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  data-prompt-completo=""
-                  class="btn-copy-original p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-zinc-600 text-zinc-300"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                </button>
-                <button
-                  data-id=""
-                  class="btn-eliminar-prompt p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-red-900 hover:border-red-700"
-                >
-                  <svg
-                    class="w-4 h-4 text-red-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </template>
-
-          <div
-            class="p-6 pt-4 border-t border-zinc-800"
-            id="controles-paginacion"
-          >
-            <div class="flex items-center justify-between">
-              <button
-                class="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400"
-                id="btn-prev"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <span class="text-sm text-zinc-400" id="span-pagina-info">
-                Página 1 de 1
-              </span>
-              <button
-                class="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400"
-                id="btn-next"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <main class="flex-1 overflow-y-auto p-8">
-        <div class="max-w-4xl mx-auto">
-          <div class="mb-8">
-            <h2 class="text-3xl font-bold text-zinc-100 mb-3">
-              Mejorador de Prompts con IA
-            </h2>
-            <p class="text-zinc-400 leading-relaxed">
-              Optimiza tus prompts para obtener mejores resultados. Nuestro
-              sistema analiza tu prompt original y lo mejora agregando claridad,
-              contexto y estructura óptima. Simplemente ingresa tu prompt y deja
-              que la IA lo transforme en una versión más efectiva y precisa.
-            </p>
-          </div>
-
-          <form id="prompt-form">
-            <div
-              class="bg-zinc-900 rounded-xl shadow-xl border border-zinc-800 p-6 mb-6"
-            >
-              <label class="block text-sm font-medium text-zinc-300 mb-2">
-                Tu prompt original
-              </label>
-              <textarea
-                placeholder="Escribe aquí tu prompt..."
-                id="user_input"
-                name="user_input"
-                class="w-full h-40 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none text-zinc-100 placeholder-zinc-600"
-              ></textarea>
-              <div class="flex gap-3 mt-4">
-                <button
-                  type="submit"
-                  id="btn-enviar"
-                  class="flex-1 py-3 px-6 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700"
-                >
-                  Generar Prompt Mejorado
-                </button>
-                <button
-                  id="clear-prompts"
-                  type="button"
-                  class="px-6 py-3 bg-zinc-800 border border-zinc-700 rounded-lg font-medium hover:bg-zinc-700 text-zinc-300"
-                >
-                  Limpiar
-                </button>
-              </div>
-            </div>
-          </form>
-
-          <div
-            class="bg-zinc-900 rounded-xl shadow-xl border border-zinc-800 p-6"
-            id="contenedor-resultado"
-            style="display: none"
-          >
-            <div class="flex items-center justify-between mb-2">
-              <label class="block text-sm font-medium text-zinc-300">
-                Prompt mejorado
-              </label>
-              <button
-                id="btn-copiar-resultado"
-                class="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors text-zinc-300"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-                Copiar
-              </button>
-            </div>
-            <div
-              id="texto-resultado"
-              class="min-h-40 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg whitespace-pre-wrap text-zinc-300"
-            >
-              Aquí aparecerá tu prompt mejorado...
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <div
-        id="modal-container"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      >
-        <div
-          class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 max-w-md mx-4 shadow-2xl"
-        >
-          <h3 class="text-xl font-bold text-zinc-100 mb-2" id="modal-titulo">
-            ¿Eliminar prompt?
-          </h3>
-          <p class="text-zinc-400 mb-6" id="modal-mensaje">
-            Esta acción no se puede deshacer. El prompt será eliminado
-            permanentemente del historial.
-          </p>
-          <div class="flex gap-3">
-            <button
-              onclick="cerrarModal()"
-              id="btn-secundario"
-              class="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg font-medium hover:bg-zinc-700 text-zinc-300"
-            >
-              Cancelar
+            <button id="btn-limpiar-busqueda"
+              class="p-2 bg-zinc-800 border border-zinc-700 rounded-lg hover:bg-zinc-700 text-zinc-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
-            <button
-              id="btn-accion"
-              class="flex-1 px-4 py-2 bg-red-600 rounded-lg font-medium hover:bg-red-700 text-white"
-            >
-              Eliminar
+          </div>
+        </div>
+
+        <div id="lista-historial" class="space-y-2 overflow-y-auto max-h-[80vh]"></div>
+        <div id="aviso-invitado" class="hidden p-6 text-center border border-dashed border-zinc-700 rounded-lg">
+          <p class="text-zinc-400 text-sm">
+            Inicia sesión para guardar y ver tus prompts anteriores.
+          </p>
+        </div>
+
+        <template id="template-historial">
+          <div
+            class="item-historial p-4 bg-zinc-800 border border-zinc-700 rounded-lg hover:border-amber-600 transition-colors">
+            <h3 class="font-medium text-zinc-100 mb-1 truncate block w-full prompt-texto-li"></h3>
+            <p class="text-sm text-zinc-500 mb-3 prompt-fecha-li"></p>
+            <div class="flex gap-2">
+              <button data-prompt-inicial="" data-prompt-mejorado="" 
+                class="btn-cargar-prompt flex-1 px-3 py-1.5 text-sm bg-amber-600 text-white rounded hover:bg-amber-700">
+                Cargar
+              </button>
+              <button data-prompt-completo=""
+                class="btn-fav p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-zinc-600 text-zinc-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+              <button data-prompt-completo=""
+                class="btn-editar p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-zinc-600 text-zinc-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </button>
+              <button data-prompt-completo=""
+                class="btn-copy-original p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-zinc-600 text-zinc-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </button>
+              <button data-id=""
+                class="btn-eliminar-prompt p-1.5 bg-zinc-700 border border-zinc-600 rounded hover:bg-red-900 hover:border-red-700">
+                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <div class="p-6 pt-4 border-t border-zinc-800" id="controles-paginacion">
+          <div class="flex items-center justify-between">
+            <button class="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400" id="btn-prev">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <span class="text-sm text-zinc-400" id="span-pagina-info">
+              Página 1 de 1
+            </span>
+            <button class="p-2 rounded-lg hover:bg-zinc-800 text-zinc-400" id="btn-next">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
         </div>
       </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-zinc-100 mb-3">
+            Mejorador de Prompts con IA
+          </h2>
+          <p class="text-zinc-400 leading-relaxed">
+            Optimiza tus prompts para obtener mejores resultados. Nuestro
+            sistema analiza tu prompt original y lo mejora agregando claridad,
+            contexto y estructura óptima. Simplemente ingresa tu prompt y deja
+            que la IA lo transforme en una versión más efectiva y precisa.
+          </p>
+        </div>
+
+        <form id="prompt-form">
+          <div class="bg-zinc-900 rounded-xl shadow-xl border border-zinc-800 p-6 mb-6">
+            <label class="block text-sm font-medium text-zinc-300 mb-2">
+              Tu prompt original
+            </label>
+            <textarea placeholder="Escribe aquí tu prompt..." id="user_input" name="user_input"
+              class="w-full h-40 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none text-zinc-100 placeholder-zinc-600"></textarea>
+            <div class="flex gap-3 mt-4">
+              <button type="submit" id="btn-enviar"
+                class="flex-1 py-3 px-6 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700">
+                Generar Prompt Mejorado
+              </button>
+              <button id="clear-prompts" type="button"
+                class="px-6 py-3 bg-zinc-800 border border-zinc-700 rounded-lg font-medium hover:bg-zinc-700 text-zinc-300">
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="bg-zinc-900 rounded-xl shadow-xl border border-zinc-800 p-6" id="contenedor-resultado"
+          style="display: none">
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-sm font-medium text-zinc-300">
+              Prompt mejorado
+            </label>
+            <button id="btn-copiar-resultado"
+              class="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors text-zinc-300">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <div id="texto-resultado"
+            class="min-h-40 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg whitespace-pre-wrap text-zinc-300">
+            Aquí aparecerá tu prompt mejorado...
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="modal-container" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 max-w-md mx-4 shadow-2xl">
+        <h3 id="modal-titulo" class="text-xl font-bold text-zinc-100 mb-2"></h3>
+        <p id="modal-mensaje" class="text-zinc-400 mb-6"></p>
+        <div class="flex gap-3">
+          <button id="btn-secundario"
+            class="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg font-medium hover:bg-zinc-700 text-zinc-300">
+            Cancelar
+          </button>
+          <button id="btn-accion"
+            class="flex-1 px-4 py-2 bg-red-600 rounded-lg font-medium hover:bg-red-700 text-white">
+            Eliminar
+          </button>
+        </div>
+      </div>
     </div>
-  </body>
-  <script src="/static/js/auth.js"></script>
-  <script src="/static/js/app.js"></script>
+  </div>
+</body>
+<script type="module" src="/static/js/main.js"></script>
+
 </html>
