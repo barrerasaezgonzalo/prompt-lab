@@ -7,10 +7,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates 
 from typing import Optional
 from services.ai import generate_ai_prompt 
-from services.database import save_prompt
+from services.database import insert_prompt_db, update_prompt_db
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from constants import PAGINATE_SIZE
+from app.schemas import PromptRequest , PromptUpdate
 
 load_dotenv()
 url: str = os.environ.get("SUPABASE_URL")
@@ -27,28 +28,67 @@ async def index(
 ): 
     return templates.TemplateResponse("index.html", {"request": request}) 
 
-@app.post("/generate")
-async def generate(
-    user_input: str = Form(...), 
-    user_id: Optional[UUID] = Form(None)
-):    
-    if len(user_input) < 5: 
-        raise HTTPException(status_code=400, detail="El prompt es demasiado corto para mejorarlo.")
-    try:        
-        mejorado = generate_ai_prompt(user_input)
-        if user_id and not mejorado.startswith("Error:"):
-            save_prompt(user_id, user_input, mejorado)
-    
-        return {
-            "mejorado": mejorado,
-            "user_id": str(user_id) if user_id else None
-        }
 
+
+@app.post("/generate-prompt")
+async def generate(data: PromptRequest):    
+    if len(data.user_input) < 5:
+        raise HTTPException(status_code=400, detail="Por favor, escribe un poco más para poder mejorar tu prompt.")
+    try:        
+        improved_prompt = generate_ai_prompt(data.user_input)
+        if len(improved_prompt) > 0:
+            # save_prompt(data.user_id, data.user_input, mejorado)    
+            return {
+                "improved_prompt": improved_prompt,
+                "user_id": str(data.user_id) if data.user_id else None
+            }
+    except HTTPException as he:
+        raise he
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error interno en el servidor")
 
+
+
+@app.post("/insert-prompt")
+async def insert_prompt_db(data: dict):
+    if len(data.get("user_input")) < 5:
+        raise HTTPException(status_code=400, detail="Por favor, escribe un poco más para poder mejorar tu prompt.")
+    try:
+        user_id = data.get("user_id")
+        user_input = data.get("user_input")
+        improved_prompt = data.get("improved_prompt")
+        prompt_id = data.get("prompt_id")  # Esto vendrá si es una edición
+
+        # Si tenemos prompt_id, es un UPDATE
+        if prompt_id:
+            response = supabase.table("prompts").update({
+                "prompt_original": user_input,
+                "prompt_mejorado": improved_prompt,
+                "updated_at": "now()" # Supabase entiende esto
+            }).eq("id", prompt_id).execute()
+            
+            return {"status": "updated", "id": prompt_id}
+
+        # Si NO tenemos prompt_id, es un INSERT
+        else:
+            response = supabase.table("prompts").insert({
+                "user_id": user_id,
+                "prompt_original": user_input,
+                "prompt_mejorado": improved_prompt
+            }).execute()
+
+            # Retornamos el ID que generó la base de datos
+            new_id = response.data[0]["id"]
+            return {"status": "created", "id": new_id}
+
+    except Exception as e:
+        print(f"Error en DB: {e}")
+        raise HTTPException(status_code=500, detail="Error al procesar la base de datos")
+
+
+
 @app.get("/get-history")
-async def get_history(page: int = 1, search: str = "", user_id: str = None):
+async def get_history(page: int = 1, search: str = "", user_id: str = None, only_favs: bool = False):
     if not user_id:
         return {"history": [], "total_paginas": 1, "error": "No user ID provided"}
     try:
@@ -57,6 +97,9 @@ async def get_history(page: int = 1, search: str = "", user_id: str = None):
         fin = inicio + items_por_pagina - 1
         
         query = supabase.table("prompts").select("*", count="exact").eq("user_id", user_id)
+
+        if only_favs:
+            query = query.eq("is_favorite", True)
         
         if search and len(search.strip()) > 0:
             query = query.ilike("prompt_original", f"%{search.strip()}%")
@@ -75,6 +118,8 @@ async def get_history(page: int = 1, search: str = "", user_id: str = None):
         print(f"Error en Python: {e}")
         return {"history": [], "total_paginas": 1, "error": str(e)}
 
+
+
 @app.delete("/delete-prompt/{prompt_id}")
 async def delete_prompt(prompt_id: str,user_id: str = None):
     if not user_id:
@@ -85,25 +130,26 @@ async def delete_prompt(prompt_id: str,user_id: str = None):
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
+
+
 @app.post("/update-prompt")
-async def update_prompt(request: Request):
+async def update_prompt_db(data: PromptUpdate):
+    user_input = data.user_input
+    improved_prompt = data.improved_prompt
+    user_id = data.user_id
+    prompt_id = data.prompt_id
     try:        
-        form_data = await request.form()
-        prompt_id = form_data.get("prompt_id")
-        nuevo_texto = form_data.get("nuevo_texto")
-        user_id = form_data.get("user_id")
+        if len(user_input.strip()) < 5:
+            raise HTTPException(status_code=400, detail="Por favor, escribe un poco más para poder mejorar tu prompt.")
+        response = supabase.table("prompts").update({
+            "prompt_original": user_input,
+            "prompt_mejorado": improved_prompt
+        }).eq("id", prompt_id).execute()
+        return {"status": "success", "message": "Prompt actualizado correctamente"}
+    except Exception as e:        
+        raise HTTPException(status_code=500, detail=f"Error al actualizar: {str(e)}")
 
-        if not prompt_id or not nuevo_texto:
-            raise HTTPException(status_code=400, detail="Faltan datos")
-        
-        supabase.table("prompts").update({
-            "prompt_original": nuevo_texto
-        }).eq("id", prompt_id).eq("user_id", user_id).execute()
 
-        return {"status": "success"}
-    except Exception as e:
-        print(f"Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/favorite/{prompt_id}")
 async def favorite_prompt(prompt_id: str,user_id: str = None):

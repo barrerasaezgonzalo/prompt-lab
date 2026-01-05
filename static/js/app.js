@@ -3,6 +3,7 @@ let paginaActual = 1;
 let totalPaginas = 1;
 let busquedaActual = "";
 let idEnEdicion = null;
+let idCreation = null;
 
 // --- 2. SELECTORES ---
 const form = document.getElementById("prompt-form");
@@ -118,10 +119,7 @@ async function manejarSubmitPrompt(e) {
   e.preventDefault();
   const userInput = document.getElementById("user_input").value.trim();
 
-  if (!userInput) {
-    abrirModal({ titulo: "Error", mensaje: "Recuerda escribir un prompt." });
-    return;
-  }
+
   if (idEnEdicion) {
     const formData = new FormData();
     formData.append("prompt_id", idEnEdicion);

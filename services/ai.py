@@ -12,6 +12,11 @@ def generate_ai_prompt(user_input: str):
     Toma el siguiente prompt de usuario y genera un prompt mejorado siguiendo estas secciones:
     "Title", "Objective", "Instructions", "Context", "Technical_Details", "Expected_Output".
 
+    NUEVA REGLA CRÍTICA:
+    Al final, añade una sección opcional llamada "Missing_Information". 
+    Si consideras que para ser un experto senior necesitas saber más (ej: presupuesto, público objetivo, software específico), redacta 2 o 3 preguntas clave para el usuario.
+    Si no es necesario, deja esta sección vacía.
+
     Reglas de Oro:
     - Actúa como un experto senior en el tema mencionado.
     - En "Instructions", no des consejos vagos; proporciona un paso a paso técnico y cronológico.
@@ -27,7 +32,6 @@ def generate_ai_prompt(user_input: str):
             messages=[{"role": "user", "content": prompt_final}],
             model="llama-3.3-70b-versatile"
         )        
-        
         return completion.choices[0].message.content 
 
     except Exception as e:

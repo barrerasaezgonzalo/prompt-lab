@@ -1,5 +1,5 @@
 // auth.js
-import { abrirModal } from "./modal.js";
+import { showToast } from "./modal.js";
 import { cargarHistorial } from "./historial.js";
 
 const SUPABASE_URL = "https://gibxykoiwscbkccafdye.supabase.co";
@@ -17,12 +17,12 @@ export function getUsuarioLogueado() {
 }
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
-  usuarioLogueado = session?.user || null; 
+  usuarioLogueado = session?.user || null;
 
   const btnLogin = document.getElementById("btn-login");
   const btnLogout = document.getElementById("btn-logout");
   const aviso = document.getElementById("aviso-invitado");
-  const lista = document.getElementById("lista-historial");
+  const lista = document.getElementById("history-list");
   const paginacion = document.getElementById("controles-paginacion");
   const historial = document.getElementById("historial");
 
@@ -33,7 +33,20 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     paginacion?.classList.remove("hidden");
     historial?.classList.remove("hidden");
     cargarHistorial(1);
+    if (event === 'SIGNED_IN') {
+      if (!sessionStorage.getItem('bienvenida_mostrada')) {
+        showToast({
+          title: "Bienvenido!",
+          message: "Gracias por volver!",
+          type: "success",
+          confirmable: false
+        });
+        sessionStorage.setItem('bienvenida_mostrada', 'true');
+      }
+
+    }
   } else {
+    sessionStorage.removeItem('bienvenida_mostrada');
     btnLogin?.classList.remove("hidden");
     btnLogout?.classList.add("hidden");
     aviso?.classList.remove("hidden");
@@ -46,6 +59,12 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 export async function cerrarSesion() {
   const { error } = await supabaseClient.auth.signOut();
   if (error) console.error("Error al salir:", error.message);
+  showToast({
+    title: "Gracias!",
+    message: "Nos vemos luego!",
+    type: "success",
+    confirmable: false
+  });
 }
 
 export async function loginConGoogle() {
@@ -53,13 +72,6 @@ export async function loginConGoogle() {
     provider: "google",
     options: { redirectTo: window.location.origin },
   });
-
-  if (error) {
-    abrirModal({
-      titulo: "Error",
-      mensaje: "No se pudo conectar con Google.",
-    });
-  }
 }
 
 document.getElementById("btn-logout")?.addEventListener("click", cerrarSesion);

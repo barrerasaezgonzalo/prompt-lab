@@ -1,19 +1,19 @@
 export const form = document.getElementById("prompt-form");
-export const resultadoDiv = document.getElementById("contenedor-resultado");
-export const textoResultado = document.getElementById("texto-resultado");
-export const btnEnviar = document.getElementById("btn-enviar");
-export const cleanPromptsBtn = document.getElementById("clear-prompts");
-export const inputBusqueda = document.getElementById("input-busqueda");
-export const btnLimpiarBusqueda = document.getElementById("btn-limpiar-busqueda");
-export const listaHistorial = document.getElementById("lista-historial");
-export const templateHistorial = document.getElementById("template-historial");
-
-export const btnPrev = document.getElementById("btn-prev");
-export const btnNext = document.getElementById("btn-next");
-export const spanInfo = document.getElementById("span-pagina-info");
-
+export const resultContainer = document.getElementById("result-container");
+export const resultText = document.getElementById("result-text");
+export const generateBtn = document.getElementById("generate-btn");
+export const clearPromptsBtn = document.getElementById("clear-prompts-btn");
+export const searchInput = document.getElementById("search-input");
+export const cleanSearchBtn = document.getElementById("clean-search-btn");
+export const historyList = document.getElementById("history-list");
+export const historyTemplate = document.getElementById("history-template");
+export const paginationPrevBtn = document.getElementById("pagination-prev-btn");
+export const paginationNextBtn = document.getElementById("btn-pagination-next");
+export const paginationInfo = document.getElementById("pagination-info");
 export const modal = document.getElementById("modal-container");
-export const modalTitulo = document.getElementById("modal-titulo");
-export const modalMensaje = document.getElementById("modal-mensaje");
-export const btnAccion = document.getElementById("btn-accion");
-export const btnSecundario = document.getElementById("btn-secundario");
+export const modalTitle = document.getElementById("modal-title");
+export const modalMenssage = document.getElementById("modal-message");
+export const modalAccionBtn = document.getElementById("modal-action-btn");
+export const modalCancelBtn = document.getElementById("modal-cancel-btn");
+export const newPromptBtn = document.getElementById("new-prompt-btn");
+export const saveBtn = document.getElementById("save-btn");
