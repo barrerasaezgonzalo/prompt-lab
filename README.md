@@ -1,61 +1,53 @@
-# AI Prompt Architect & Manager
+A powerful tool designed to transform simple ideas into professional AI prompts, featuring history management, favorites, and real-time editing.
 
-A professional web application designed to transform simple user ideas into high-fidelity, structured AI prompts. This tool leverages prompt engineering principles to bridge the gap between vague requests and high-quality, actionable AI outputs.
+## ✨ Features
 
-## 🚀 Features
-
-- **Prompt Structuring Engine:** Automatically converts brief inputs into a comprehensive framework: _Title, Objective, Instructions, Context, Technical Details,_ and _Expected Output_.
-- **Full CRUD Integration:** Create, Read, Update, and Delete prompts with real-time synchronization via Supabase.
-- **Favorites System:** Pin your most valuable prompts to the top of your list with a single click.
-- **Persistent History:** Organized log of generated prompts with pagination for efficient management.
-- **One-Click Copy:** Instant clipboard integration to move your engineered prompts directly into LLMs like ChatGPT or Claude.
-- **Modern UX/UI:** Responsive design featuring dynamic SVG iconography, modal confirmations, and real-time state updates.
+- **Smart Refining:** Optimize your prompts using AI-driven logic.
+- **Iterative Workflow:** Refine and improve the same prompt multiple times while maintaining its version history.
+- **Full History:** Automatically save your creations to reuse them later.
+- **Favorites System:** Mark your best prompts with ⭐ to find them instantly.
+- **View Mode:** Inspect saved prompts without the risk of accidental edits (Read-only).
+- **Optimized UX:** - Informative tooltips for better navigation.
+  - Data loss prevention when clearing the editor.
+  - Intelligent versioning (smart Update vs. Insert logic).
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** HTML5, Tailwind CSS, JavaScript (Vanilla ES6+)
-- **Backend:** Python (FastAPI / Flask)
-- **Database:** Supabase (PostgreSQL)
-- **Styling:** Tailwind CSS
+- **Frontend:** HTML5, Tailwind CSS, JavaScript (Vanilla ES6).
+- **Backend:** Python with FastAPI.
+- **Database:** Supabase (PostgreSQL).
+- **AI:** Integration with Large Language Models.
 
-## 📋 Database Schema (Supabase)
-
-The application uses a table named `prompts` with the following structure:
-
-| Column       | Type       | Description                    |
-| :----------- | :--------- | :----------------------------- |
-| id           | UUID / Int | Primary Key                    |
-| created_at   | Timestamp  | Record creation date           |
-| input        | Text       | User's original idea           |
-| prompt_final | Text       | AI-generated structured prompt |
-| is_favorite  | Boolean    | Flag for pinned items          |
-
-## ⚙️ Installation & Setup
+## 🚀 Installation & Setup
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/barrerasaezgonzalo/prompt-lab](https://github.com/barrerasaezgonzalo/prompt-lab)
+   git clone hhttps://github.com/barrerasaezgonzalo/prompt-lab.git
+   cd prompt-lab
    ```
-2. **Install dependencies:**
+
+2. **Set up virtual environment:**
    ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    pip install -r requirements.txt
    ```
-3. **Environment Variables: Create a .env file and add your credentials:**
-   ```bash
+
+3. **Environment Variables:**
+   Create a `.env` file and add your credentials:
+   ```env
    SUPABASE_URL=your_supabase_url
-   SUPABASE_KEY=your_supabase_anon_key
-   AI_API_KEY=your_llm_api_key
+   SUPABASE_KEY=your_api_key
+   OPENAI_API_KEY=your_ai_model_key
    ```
+
 4. **Run the application:**
-   `bash
- python app.py
- `
-   **Prompt Engineering Logic**
+   ```bash
+   uvicorn main:app --reload
+   ```
 
-The core value lies in the System Architect Prompt, which instructs the AI to:
+## 📸 Screenshots
+*(You can drag and drop an image of your app here once you upload it to GitHub)*
 
-Act as a Senior Expert in the relevant field.
-
-Provide chronological, technical, and non-vague instructions.
-
-Include a Technical Details section with specific tools and advanced concepts (e.g., JWT, Normalization, React Hooks).
+---
+Developed with ❤️ to improve interaction with Large Language Models.
