@@ -21,12 +21,14 @@ A powerful tool designed to transform simple ideas into professional AI prompts,
 ## 🚀 Installation & Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone hhttps://github.com/barrerasaezgonzalo/prompt-lab.git
    cd prompt-lab
    ```
 
 2. **Set up virtual environment:**
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -35,6 +37,7 @@ A powerful tool designed to transform simple ideas into professional AI prompts,
 
 3. **Environment Variables:**
    Create a `.env` file and add your credentials:
+
    ```env
    SUPABASE_URL=your_supabase_url
    SUPABASE_KEY=your_api_key
@@ -47,7 +50,9 @@ A powerful tool designed to transform simple ideas into professional AI prompts,
    ```
 
 ## 📸 Screenshots
-*(You can drag and drop an image of your app here once you upload it to GitHub)*
+
+_(You can drag and drop an image of your app here once you upload it to GitHub)_
 
 ---
+
 Developed with ❤️ to improve interaction with Large Language Models.

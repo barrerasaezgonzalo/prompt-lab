@@ -15,29 +15,28 @@ import {
   setIdEnEdicion,
   setCurrentDraft,
   soloFavoritos,
-  setSoloFavoritos
+  setSoloFavoritos,
 } from "./state.js";
 
 import { cargarHistorial } from "./historial.js";
 import { resetearFormulario, copiarAlPortapapeles } from "./form.js";
 import { showToast } from "./modal.js";
-import { getUsuarioLogueado } from './auth.js';
+import { getUsuarioLogueado } from "./auth.js";
 
 newPromptBtn?.addEventListener("click", () => {
   resetearFormulario();
-})
+});
 
 clearPromptsBtn?.addEventListener("click", () => {
   showToast({
-      title: "Limpiar",
-      message: `¿Deseas limpiar este prompt?`,
-      type: "warning",
-      confirmable: true,
-      onConfirm: async () => {
-        resetearFormulario();
-      },
-    });
-  
+    title: "Limpiar",
+    message: `¿Deseas limpiar este prompt?`,
+    type: "warning",
+    confirmable: true,
+    onConfirm: async () => {
+      resetearFormulario();
+    },
+  });
 });
 
 searchInput?.addEventListener("input", (e) => {
@@ -90,7 +89,9 @@ historyList?.addEventListener("click", async (e) => {
       type: "warning",
       confirmable: true,
       onConfirm: async () => {
-        await fetch(`/delete-prompt/${id}?user_id=${usuario.id}`, { method: "DELETE" });
+        await fetch(`/delete-prompt/${id}?user_id=${usuario.id}`, {
+          method: "DELETE",
+        });
         cargarHistorial(1);
       },
     });
@@ -99,37 +100,39 @@ historyList?.addEventListener("click", async (e) => {
   if (btn(".btn-refinar")) {
     resetearFormulario();
     setIdEnEdicion(btn(".btn-refinar").dataset.promptId);
-    document.getElementById("user_input").value = btn(".btn-refinar").dataset.promptInicial;
+    document.getElementById("user_input").value =
+      btn(".btn-refinar").dataset.promptInicial;
     document.getElementById("save-btn").style.display = "block";
     document.getElementById("result-container").style.display = "block";
-    document.getElementById("result-text").innerText = btn(".btn-refinar").dataset.promptMejorado;
+    document.getElementById("result-text").innerText =
+      btn(".btn-refinar").dataset.promptMejorado;
     setCurrentDraft(btn(".btn-refinar").dataset.promptMejorado);
   }
 
   if (btn(".btn-view")) {
     resetearFormulario();
     //setIdEnEdicion(btn(".btn-view").dataset.promptId);
-    document.getElementById("user_input").value = btn(".btn-view").dataset.promptInicial;
+    document.getElementById("user_input").value =
+      btn(".btn-view").dataset.promptInicial;
     document.getElementById("save-btn").style.display = "none";
     document.getElementById("generate-btn").style.display = "none";
     document.getElementById("clear-prompts-btn").style.display = "none";
     document.getElementById("result-container").style.display = "block";
-    document.getElementById("result-text").innerText = btn(".btn-view").dataset.promptMejorado;
+    document.getElementById("result-text").innerText =
+      btn(".btn-view").dataset.promptMejorado;
     //setCurrentDraft(btn(".btn-refinar").dataset.promptMejorado);
   }
 
   // if (btn(".btn-cargar-prompt")) {
   //   resetearFormulario();
   //   document.getElementById("user_input").value =
-  //     btn(".btn-cargar-prompt").dataset.promptInicial; 
+  //     btn(".btn-cargar-prompt").dataset.promptInicial;
   //   document.getElementById("result-container").style.display = "block";
   //   document.getElementById("result-text").innerText = btn(".btn-cargar-prompt").dataset.promptMejorado; ;
   // }
 
   if (btn(".btn-copy-original")) {
-    copiarAlPortapapeles(
-      btn(".btn-copy-original").dataset.promptCompleto,
-    );
+    copiarAlPortapapeles(btn(".btn-copy-original").dataset.promptCompleto);
   }
 
   // if (btn(".btn-editar")) {
@@ -146,8 +149,9 @@ historyList?.addEventListener("click", async (e) => {
 
     showToast({
       title: "Favorito",
-      message: `¿Deseas ${isFav === "true" ? "desmarcar" : "marcar"
-        } este prompt como favorito?`,
+      message: `¿Deseas ${
+        isFav === "true" ? "desmarcar" : "marcar"
+      } este prompt como favorito?`,
       type: "warning",
       confirmable: true,
       onConfirm: async () => {

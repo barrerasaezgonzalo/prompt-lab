@@ -20,7 +20,7 @@ const templateHistorial = document.getElementById("template-historial");
 
 function resetearFormulario() {
   idEnEdicion = null;
-  document.getElementById("user_input").value = "";  
+  document.getElementById("user_input").value = "";
   const btnEnviar = document.getElementById("btn-enviar");
   btnEnviar.innerText = "Generar Prompt Mejorado";
   btnEnviar.disabled = false;
@@ -118,7 +118,6 @@ function actualizarUI() {
 async function manejarSubmitPrompt(e) {
   e.preventDefault();
   const userInput = document.getElementById("user_input").value.trim();
-
 
   if (idEnEdicion) {
     const formData = new FormData();
@@ -264,7 +263,9 @@ listaHistorial.addEventListener("click", async (e) => {
       mensaje: "Esto borrará el registro permanentemente.",
       esConfirmacion: true,
       alConfirmar: async () => {
-        const response = await fetch(`/delete-prompt/${id}`, { method: "DELETE" });
+        const response = await fetch(`/delete-prompt/${id}`, {
+          method: "DELETE",
+        });
         if (response.ok) {
           if (idEnEdicion === id) {
             resetearFormulario();

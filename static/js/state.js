@@ -11,5 +11,9 @@ export const setTotalPaginas = (v) => (totalPaginas = v);
 export const setBusquedaActual = (v) => (busquedaActual = v);
 export const setIdEnEdicion = (v) => (idEnEdicion = v);
 export const setInCreation = (v) => (inCreation = v);
-export function setCurrentDraft(val) { currentDraft = val };
-export function setSoloFavoritos(val) { soloFavoritos = val; }
+export function setCurrentDraft(val) {
+  currentDraft = val;
+}
+export function setSoloFavoritos(val) {
+  soloFavoritos = val;
+}

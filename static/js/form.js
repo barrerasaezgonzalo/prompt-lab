@@ -11,13 +11,12 @@ import {
   idEnEdicion,
   setIdEnEdicion,
   currentDraft,
-  setCurrentDraft
+  setCurrentDraft,
 } from "./state.js";
 
 import { cargarHistorial } from "./historial.js";
 import { showToast } from "./modal.js";
-import { getUsuarioLogueado } from './auth.js';
-
+import { getUsuarioLogueado } from "./auth.js";
 
 let isGenerating = false;
 
@@ -32,7 +31,6 @@ export function resetearFormulario() {
   generateBtn.disabled = false;
   resultContainer.style.display = "none";
 }
-
 
 async function manejarSubmitPrompt(e) {
   e.preventDefault();
@@ -53,9 +51,9 @@ async function manejarSubmitPrompt(e) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        "user_input": userInput,
-        "user_id": usuario?.id || null
-      })
+        user_input: userInput,
+        user_id: usuario?.id || null,
+      }),
     });
 
     if (!response.ok) {
@@ -64,9 +62,11 @@ async function manejarSubmitPrompt(e) {
     }
 
     const data = await response.json();
-    const [promptPart, questionsPart] = data.improved_prompt.split("Missing_Information");
+    const [promptPart, questionsPart] = data.improved_prompt.split(
+      "Missing_Information",
+    );
 
-    setCurrentDraft(promptPart.trim())
+    setCurrentDraft(promptPart.trim());
     resultText.innerText = currentDraft;
 
     const questionsBox = document.getElementById("iteration-questions");
@@ -82,8 +82,13 @@ async function manejarSubmitPrompt(e) {
     resultContainer.style.display = "block";
     saveBtn.style.display = "block";
 
-    showToast({ title: "Generado", message: usuario ? "IA ha respondido" : "Conectate para poder guardar tu historial", type: "success" });
-
+    showToast({
+      title: "Generado",
+      message: usuario
+        ? "IA ha respondido"
+        : "Conectate para poder guardar tu historial",
+      type: "success",
+    });
   } catch (error) {
     console.error("Error:", error);
     showToast({ type: "warning", title: "Error", message: error.message });
@@ -92,12 +97,16 @@ async function manejarSubmitPrompt(e) {
     generateBtn.disabled = false;
     generateBtn.innerText = "Generar Prompt Mejorado";
   }
-
 }
 
 saveBtn.addEventListener("click", async () => {
   const usuario = getUsuarioLogueado();
-  if (!usuario) return showToast({ title: "Acceso denegado", message: "Loguéate", type: "error" });
+  if (!usuario)
+    return showToast({
+      title: "Acceso denegado",
+      message: "Loguéate",
+      type: "error",
+    });
 
   if (!currentDraft) return;
 
@@ -106,17 +115,17 @@ saveBtn.addEventListener("click", async () => {
     user_input: userInput,
     user_id: usuario.id,
     improved_prompt: currentDraft,
-    ...(idEnEdicion && { prompt_id: idEnEdicion })
+    ...(idEnEdicion && { prompt_id: idEnEdicion }),
   };
 
   try {
     saveBtn.disabled = true;
-    const url = idEnEdicion ? '/update-prompt' : '/insert-prompt';
+    const url = idEnEdicion ? "/update-prompt" : "/insert-prompt";
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     const res = await response.json();
@@ -125,7 +134,11 @@ saveBtn.addEventListener("click", async () => {
       setInCreation(false);
     }
 
-    showToast({ title: "¡Éxito!", message: "Los cambios fueron guardados correctamente", type: "success" });
+    showToast({
+      title: "¡Éxito!",
+      message: "Los cambios fueron guardados correctamente",
+      type: "success",
+    });
     cargarHistorial(1);
   } catch (error) {
     showToast({ title: "Error", message: error.message, type: "error" });
@@ -137,11 +150,11 @@ saveBtn.addEventListener("click", async () => {
 export function copiarAlPortapapeles(texto) {
   if (!texto || texto === "Generando...") return;
   navigator.clipboard.writeText(texto);
-   showToast({
-        title: "Copiando",
-        message: `Texto Copiado Correctamente`,
-        type: "info"
-      });
+  showToast({
+    title: "Copiando",
+    message: `Texto Copiado Correctamente`,
+    type: "info",
+  });
 }
 
 form.addEventListener("submit", manejarSubmitPrompt);

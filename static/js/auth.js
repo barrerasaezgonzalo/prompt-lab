@@ -33,20 +33,19 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     paginacion?.classList.remove("hidden");
     historial?.classList.remove("hidden");
     cargarHistorial(1);
-    if (event === 'SIGNED_IN') {
-      if (!sessionStorage.getItem('bienvenida_mostrada')) {
+    if (event === "SIGNED_IN") {
+      if (!sessionStorage.getItem("bienvenida_mostrada")) {
         showToast({
           title: "Bienvenido!",
           message: "Gracias por volver!",
           type: "success",
-          confirmable: false
+          confirmable: false,
         });
-        sessionStorage.setItem('bienvenida_mostrada', 'true');
+        sessionStorage.setItem("bienvenida_mostrada", "true");
       }
-
     }
   } else {
-    sessionStorage.removeItem('bienvenida_mostrada');
+    sessionStorage.removeItem("bienvenida_mostrada");
     btnLogin?.classList.remove("hidden");
     btnLogout?.classList.add("hidden");
     aviso?.classList.remove("hidden");
@@ -63,7 +62,7 @@ export async function cerrarSesion() {
     title: "Gracias!",
     message: "Nos vemos luego!",
     type: "success",
-    confirmable: false
+    confirmable: false,
   });
 }
 

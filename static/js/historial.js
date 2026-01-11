@@ -12,10 +12,10 @@ import {
   busquedaActual,
   setPaginaActual,
   setTotalPaginas,
-  soloFavoritos, 
+  soloFavoritos,
 } from "./state.js";
 
-import { getUsuarioLogueado } from './auth.js';
+import { getUsuarioLogueado } from "./auth.js";
 
 export async function cargarHistorial(pagina = 1) {
   const usuario = getUsuarioLogueado();
@@ -51,23 +51,25 @@ export async function cargarHistorial(pagina = 1) {
         .querySelector(".btn-eliminar-prompt")
         ?.setAttribute("data-id", item.id);
 
-      clone.querySelector(".btn-copy-original")?.setAttribute(
-        "data-prompt-completo",
-        `--- PROMPT ORIGINAL ---\n${item.prompt_original}\n--- PROMPT MEJORADO ---\n${item.prompt_mejorado}`,
-      );
+      clone
+        .querySelector(".btn-copy-original")
+        ?.setAttribute(
+          "data-prompt-completo",
+          `--- PROMPT ORIGINAL ---\n${item.prompt_original}\n--- PROMPT MEJORADO ---\n${item.prompt_mejorado}`,
+        );
 
       const btnRefinar = clone.querySelector(".btn-refinar");
       if (btnRefinar) {
         btnRefinar.setAttribute("data-prompt-inicial", item.prompt_original);
         btnRefinar.setAttribute("data-prompt-mejorado", item.prompt_mejorado);
-        btnRefinar.setAttribute("data-prompt-id", item.id)
+        btnRefinar.setAttribute("data-prompt-id", item.id);
       }
 
       const viewBtn = clone.querySelector(".btn-view");
       if (viewBtn) {
         viewBtn.setAttribute("data-prompt-inicial", item.prompt_original);
         viewBtn.setAttribute("data-prompt-mejorado", item.prompt_mejorado);
-        viewBtn.setAttribute("data-prompt-id", item.id)
+        viewBtn.setAttribute("data-prompt-id", item.id);
       }
 
       const btnFav = clone.querySelector(".btn-fav");
@@ -75,10 +77,7 @@ export async function cargarHistorial(pagina = 1) {
         btnFav.setAttribute("data-id", item.id);
         btnFav.setAttribute("data-fav", item.is_favorite);
         const svg = btnFav.querySelector("svg");
-        svg?.setAttribute(
-          "fill",
-          item.is_favorite ? "currentColor" : "none",
-        );
+        svg?.setAttribute("fill", item.is_favorite ? "currentColor" : "none");
         btnFav.classList.toggle("text-red-500", item.is_favorite);
       }
 

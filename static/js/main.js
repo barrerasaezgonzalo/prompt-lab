@@ -6,8 +6,7 @@ import "./form.js";
 import "./modal.js";
 import "./events.js";
 
-
 document.addEventListener("DOMContentLoaded", async () => {
-  await getUsuarioLogueado()
+  await getUsuarioLogueado();
   cargarHistorial(1);
 });
