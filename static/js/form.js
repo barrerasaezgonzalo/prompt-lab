@@ -22,6 +22,9 @@ let isGenerating = false;
 
 export function resetearFormulario() {
   setIdEnEdicion(null);
+  document.getElementById("save-btn").style.display = "block";
+  document.getElementById("generate-btn").style.display = "block";
+  document.getElementById("clear-prompts-btn").style.display = "block";
   document.getElementById("user_input").value = "";
   if (saveBtn) {
     saveBtn.style.display = "none";

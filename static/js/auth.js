@@ -1,6 +1,7 @@
 // auth.js
 import { showToast } from "./modal.js";
 import { cargarHistorial } from "./historial.js";
+import { resetearFormulario } from "./form.js";
 
 const SUPABASE_URL = "https://gibxykoiwscbkccafdye.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -57,6 +58,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 
 export async function cerrarSesion() {
   const { error } = await supabaseClient.auth.signOut();
+  resetearFormulario();
   if (error) console.error("Error al salir:", error.message);
   showToast({
     title: "Gracias!",
