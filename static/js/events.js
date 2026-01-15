@@ -106,7 +106,17 @@ historyList?.addEventListener("click", async (e) => {
     document.getElementById("result-container").style.display = "block";
     document.getElementById("result-text").innerText =
       btn(".btn-refinar").dataset.promptMejorado;
+    document.getElementById("user_input").readOnly = false;
     setCurrentDraft(btn(".btn-refinar").dataset.promptMejorado);
+    const formulario = document.getElementById('prompt-form');
+    const contenedorConScroll = document.querySelector('main');
+    if (formulario && contenedorConScroll) {
+      const posicion = formulario.offsetTop - 20;
+      contenedorConScroll.scrollTo({
+        top: posicion,
+        behavior: 'smooth'
+      });
+    }
   }
 
   if (btn(".btn-view")) {
@@ -120,6 +130,16 @@ historyList?.addEventListener("click", async (e) => {
     document.getElementById("result-container").style.display = "block";
     document.getElementById("result-text").innerText =
       btn(".btn-view").dataset.promptMejorado;
+    document.getElementById("user_input").readOnly = true;
+    const formulario = document.getElementById('prompt-form');
+    const contenedorConScroll = document.querySelector('main');
+    if (formulario && contenedorConScroll) {
+      const posicion = formulario.offsetTop - 20;
+      contenedorConScroll.scrollTo({
+        top: posicion,
+        behavior: 'smooth'
+      });
+    }
     //setCurrentDraft(btn(".btn-refinar").dataset.promptMejorado);
   }
 
@@ -149,9 +169,8 @@ historyList?.addEventListener("click", async (e) => {
 
     showToast({
       title: "Favorito",
-      message: `¿Deseas ${
-        isFav === "true" ? "desmarcar" : "marcar"
-      } este prompt como favorito?`,
+      message: `¿Deseas ${isFav === "true" ? "desmarcar" : "marcar"
+        } este prompt como favorito?`,
       type: "warning",
       confirmable: true,
       onConfirm: async () => {

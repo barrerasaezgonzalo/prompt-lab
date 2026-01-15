@@ -33,6 +33,19 @@ export function resetearFormulario() {
   generateBtn.innerText = "Generar Prompt Mejorado";
   generateBtn.disabled = false;
   resultContainer.style.display = "none";
+  const formulario = document.getElementById('prompt-form');
+  const contenedorConScroll = document.querySelector('main');
+
+  if (formulario && contenedorConScroll) {
+    const posicion = formulario.offsetTop - 20;
+
+    contenedorConScroll.scrollTo({
+      top: posicion,
+      behavior: 'smooth'
+    });
+  }
+  document.getElementById("user_input").readOnly = false;
+  document.getElementById('user_input')?.focus();
 }
 
 async function manejarSubmitPrompt(e) {
@@ -64,7 +77,7 @@ async function manejarSubmitPrompt(e) {
       throw new Error(errorData.detail);
     }
 
-    const data = await response.json();
+   const data = await response.json();
     const [promptPart, questionsPart] = data.improved_prompt.split(
       "Missing_Information",
     );
@@ -83,7 +96,10 @@ async function manejarSubmitPrompt(e) {
     }
 
     resultContainer.style.display = "block";
-    saveBtn.style.display = "block";
+    saveBtn.style.display = "block";   
+
+    resultContainer?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
 
     showToast({
       title: "Generado",

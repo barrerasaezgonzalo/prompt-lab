@@ -28,7 +28,9 @@ async def index(
 ): 
     return templates.TemplateResponse("index.html", {"request": request}) 
 
-
+@app.get("/guia")
+async def mostrar_guia(request: Request):
+    return templates.TemplateResponse("guia.html", {"request": request})
 
 @app.post("/generate-prompt")
 async def generate(data: PromptRequest):    

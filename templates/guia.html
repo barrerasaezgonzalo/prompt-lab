@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Inicio: El Arte de Hablar con la IA | Prompt Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body class="bg-slate-950 text-slate-200 selection:bg-blue-500/30">
+
+    <nav class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-md">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="ph ph-sparkle text-blue-500 text-2xl"></i>
+                <span class="font-bold text-white tracking-tight underline decoration-blue-500 decoration-2">GUÍA PARA PRINCIPIANTES</span>
+            </div>
+            <a href="/" class="text-sm font-medium hover:text-white transition-colors flex items-center gap-2 text-slate-400">
+                <i class="ph ph-arrow-left"></i> Volver al Laboratorio
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto py-16 px-6">
+        <header class="mb-20">
+            <h1 class="text-5xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+                Escribir un Prompt es como <span class="text-blue-500">dar instrucciones a un genio.</span>
+            </h1>
+            <p class="text-xl text-slate-400 leading-relaxed">
+                Imagina que la IA es un barista muy inteligente pero que no sabe nada de tu vida. Si le pides "un café", te traerá cualquiera. Si le explicas el grano, la temperatura y la taza, tendrás el café perfecto.
+            </p>
+        </header>
+
+        <div class="space-y-20">
+            
+            <section>
+                <h2 class="text-3xl font-bold text-white mb-10 flex items-center gap-4">
+                    <span class="h-px flex-1 bg-white/10"></span>
+                    01. Los 4 Pilares del Prompt
+                    <span class="h-px flex-1 bg-white/10"></span>
+                </h2>
+
+                <div class="space-y-8">
+                    <div class="flex gap-6 p-6 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-900 transition-all">
+                        <div class="w-12 h-12 rounded-full bg-blue-600/20 flex items-center justify-center flex-shrink-0">
+                            <i class="ph ph-user-circle-plus text-blue-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Asigna un Rol (La Personalidad)</h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Si no le dices quién es, la IA responderá de forma "promedio". Al decirle <span class="text-blue-400">"Actúa como un Nutricionista Deportivo"</span>, activas un vocabulario y una lógica específica que no obtendrías de otra forma. Es como ponerle un disfraz profesional.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6 p-6 rounded-2xl bg-slate-900/50 border border-white/5 hover:bg-slate-900 transition-all">
+                        <div class="w-12 h-12 rounded-full bg-emerald-600/20 flex items-center justify-center flex-shrink-0">
+                            <i class="ph ph-notebook text-emerald-500 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Dale Contexto (El Paisaje)</h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                La IA necesita saber el "dónde" y el "por qué". No es lo mismo escribir un correo para tu jefe que para un cliente enfadado. Explícale la situación: <span class="text-emerald-400">"Tengo que entregar un proyecto hoy, pero se ha caído el servidor y necesito pedir una prórroga de 24 horas"</span>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+
+            <section class="relative">
+                <div class="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 to-transparent"></div>
+                <h2 class="text-3xl font-bold text-white mb-6 pl-4">El Truco Mágico: "Pensar paso a paso"</h2>
+                <div class="bg-blue-600/10 p-8 rounded-3xl border border-blue-500/20">
+                    <p class="text-lg text-slate-300 mb-6 leading-relaxed">
+                        Este es el secreto mejor guardado de los ingenieros. Cuando le pides algo difícil a la IA, a veces se precipita y comete errores tontos.
+                    </p>
+                    <div class="bg-slate-950 p-6 rounded-xl border border-white/5 mb-6">
+                        <p class="text-blue-400 font-mono text-sm mb-2 font-bold">💡 ÚSALO ASÍ:</p>
+                        <p class="text-white italic">"Analiza este problema de finanzas. **Antes de darme el resultado, explica tu razonamiento paso a paso** para asegurarnos de que no hay errores."</p>
+                    </div>
+                    <p class="text-slate-400 text-sm">
+                        Esto hace que la IA use una parte de su "cerebro" para verificar la lógica antes de escribir la respuesta final.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-white mb-10 text-center">Transformación Real</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 text-red-500">
+                            <i class="ph ph-x-circle-fill"></i>
+                            <span class="font-bold uppercase tracking-widest text-xs">Prompt de Principiante</span>
+                        </div>
+                        <div class="bg-red-500/5 border border-red-500/20 p-6 rounded-2xl h-full">
+                            <p class="text-slate-300 italic">"Dame una receta de cena saludable con pollo."</p>
+                            <p class="mt-4 text-xs text-red-400/60 font-medium">Resultado: Una receta genérica que quizás no te gusta o no tienes los ingredientes.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 text-blue-500">
+                            <i class="ph ph-check-circle-fill"></i>
+                            <span class="font-bold uppercase tracking-widest text-xs">Prompt de Experto (Prompt Lab)</span>
+                        </div>
+                        <div class="bg-blue-500/5 border border-blue-500/20 p-6 rounded-2xl h-full">
+                            <p class="text-white">"Actúa como un **Chef de cocina saludable**. Crea una receta de cena con pollo que se haga en **menos de 20 minutos**. Solo tengo brócoli y cebolla. Evita usar lácteos porque soy intolerante."</p>
+                            <p class="mt-4 text-xs text-blue-400/60 font-medium">Resultado: Una solución personalizada, rápida y segura para tu salud.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center bg-gradient-to-r from-blue-600/20 to-purple-600/20 p-12 rounded-3xl border border-white/10">
+                <i class="ph ph-lightbulb-filament text-4xl text-blue-400 mb-4"></i>
+                <h3 class="text-2xl font-bold text-white mb-4">Un último consejo...</h3>
+                <p class="text-slate-400 max-w-xl mx-auto leading-relaxed">
+                    No tengas miedo de hablarle mucho a la IA. Cuanta más información le des, mejor será el resultado. ¡Es imposible darle "demasiados" detalles!
+                </p>
+            </div>
+        </div>
+
+        <footer class="mt-24 text-center">
+            <p class="text-slate-600 text-sm">© 2026 Prompt Lab - Diseñado para humanos, potenciado por IA.</p>
+        </footer>
+    </main>
+</body>
+</html>

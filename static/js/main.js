@@ -5,6 +5,7 @@ import { cargarHistorial } from "./historial.js";
 import "./form.js";
 import "./modal.js";
 import "./events.js";
+import  "./templates.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await getUsuarioLogueado();

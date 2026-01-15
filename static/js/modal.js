@@ -69,7 +69,7 @@ export function showToast({
   } else {
     footer.classList.add("hidden");
     // Si no es confirmable, auto-cerrar en 4 segundos
-    toastTimer = setTimeout(closeToast, 4000);
+    toastTimer = setTimeout(closeToast, 6000);
   }
 
   // 5. Mostrar con animación
